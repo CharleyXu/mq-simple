@@ -22,7 +22,7 @@ public class MyKafkaListener {
             @TopicPartition(topic = TOPIC, partitions = {"0"})})
     public void listenPartition0(List<ConsumerRecord<?, ?>> records) {
         LOGGER.info("Id0 Listener, Thread ID: " + Thread.currentThread().getId());
-        LOGGER.info("Id0 records size " + records.size());
+        LOGGER.info("Id0 Records Size " + records.size());
 
         for (ConsumerRecord<?, ?> record : records) {
             Optional<?> kafkaMessage = Optional.ofNullable(record.value());
@@ -39,7 +39,7 @@ public class MyKafkaListener {
             @TopicPartition(topic = TOPIC, partitions = {"1"})})
     public void listenPartition1(List<ConsumerRecord<?, ?>> records) {
         LOGGER.info("Id1 Listener, Thread ID: " + Thread.currentThread().getId());
-        LOGGER.info("Id1 records size " + records.size());
+        LOGGER.info("Id1 Records Size " + records.size());
 
         for (ConsumerRecord<?, ?> record : records) {
             Optional<?> kafkaMessage = Optional.ofNullable(record.value());

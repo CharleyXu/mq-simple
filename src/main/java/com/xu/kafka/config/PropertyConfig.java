@@ -26,6 +26,8 @@ public class PropertyConfig {
 
     @Value("${spring.kafka.consumer.max-poll-records}")
     private Integer maxPollRecords;
+    @Value("${spring.kafka.consumer.fetch-max-wait}")
+    private Integer fetchMaxWait;
 
     public String getBroker() {
         return broker;
@@ -49,5 +51,9 @@ public class PropertyConfig {
 
     public Integer getMaxPollRecords() {
         return maxPollRecords;
+    }
+
+    public Integer getFetchMaxWait() {
+        return fetchMaxWait;
     }
 }

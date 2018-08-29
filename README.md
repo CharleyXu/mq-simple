@@ -4,3 +4,5 @@
 Kafka原生的API可以通过poll(num)批量获取num条消息
 
 设置@KafkaListener实现批量监听
+
+基于时间戳，获取offsets和消费
