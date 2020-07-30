@@ -1,5 +1,6 @@
 package com.xu.kafka.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by CharleyXu on 2020-07-30
  */
+@Slf4j
 public class KafkaExactlyOnceDemo {
 
     private static final String INPUT_TOPIC = "input-topic";
@@ -26,8 +28,9 @@ public class KafkaExactlyOnceDemo {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
         if (args.length != 3) {
-            throw new IllegalArgumentException("Should accept 3 parameters: " +
-                    "[number of partitions], [number of instances], [number of records]");
+//            throw new IllegalArgumentException("Should accept 3 parameters: " +
+//                    "[number of partitions], [number of instances], [number of records]");
+            args = new String[]{"6", "3", "50000"};
         }
 
         int numPartitions = Integer.parseInt(args[0]);
@@ -71,7 +74,7 @@ public class KafkaExactlyOnceDemo {
         }
 
         consumerThread.shutdown();
-        System.out.println("All finished!");
+        log.info("All finished!");
     }
 
     private static void recreateTopics(final int numPartitions)
@@ -88,10 +91,10 @@ public class KafkaExactlyOnceDemo {
 
         // Check topic existence in a retry loop
         while (true) {
-            System.out.println("Making sure the topics are deleted successfully: " + topicsToDelete);
+            log.info("Making sure the topics are deleted successfully: " + topicsToDelete);
 
             Set<String> listedTopics = adminClient.listTopics().names().get();
-            System.out.println("Current list of topics: " + listedTopics);
+            log.info("Current list of topics: " + listedTopics);
 
             boolean hasTopicInfo = false;
             for (String listedTopic : listedTopics) {
@@ -114,13 +117,13 @@ public class KafkaExactlyOnceDemo {
                     new NewTopic(OUTPUT_TOPIC, numPartitions, replicationFactor));
             try {
                 adminClient.createTopics(newTopics).all().get();
-                System.out.println("Created new topics: " + newTopics);
+                log.info("Created new topics: " + newTopics);
                 break;
             } catch (ExecutionException e) {
                 if (!(e.getCause() instanceof TopicExistsException)) {
                     throw e;
                 }
-                System.out.println("Metadata of the old topics are not cleared yet...");
+                log.info("Metadata of the old topics are not cleared yet...");
 
                 deleteTopic(adminClient, topicsToDelete);
 
@@ -137,9 +140,9 @@ public class KafkaExactlyOnceDemo {
             if (!(e.getCause() instanceof UnknownTopicOrPartitionException)) {
                 throw e;
             }
-            System.out.println("Encountered exception during topic deletion: " + e.getCause());
+            log.info("Encountered exception during topic deletion: " + e.getCause());
         }
-        System.out.println("Deleted old topics: " + topicsToDelete);
+        log.info("Deleted old topics: " + topicsToDelete);
     }
 
 }

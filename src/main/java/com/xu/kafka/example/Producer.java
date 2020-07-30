@@ -1,5 +1,6 @@
 package com.xu.kafka.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by CharleyXu on 2020-07-30
  */
+@Slf4j
 public class Producer extends Thread {
     private final KafkaProducer<Integer, String> producer;
     private final String topic;
@@ -69,7 +71,7 @@ public class Producer extends Thread {
                     producer.send(new ProducerRecord<>(topic,
                             messageKey,
                             messageStr)).get();
-                    System.out.println("Sent message: (" + messageKey + ", " + messageStr + ")");
+                    log.info("Sent message: (" + messageKey + ", " + messageStr + ")");
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -77,11 +79,12 @@ public class Producer extends Thread {
             messageKey += 2;
             recordsSent += 1;
         }
-        System.out.println("Producer sent " + numRecords + " records successfully");
+        log.info("Producer sent " + numRecords + " records successfully");
         latch.countDown();
     }
 }
 
+@Slf4j
 class DemoCallBack implements Callback {
 
     private final long startTime;
@@ -106,7 +109,7 @@ class DemoCallBack implements Callback {
     public void onCompletion(RecordMetadata metadata, Exception exception) {
         long elapsedTime = System.currentTimeMillis() - startTime;
         if (metadata != null) {
-            System.out.println(
+            log.info(
                     "message(" + key + ", " + message + ") sent to partition(" + metadata.partition() +
                             "), " +
                             "offset(" + metadata.offset() + ") in " + elapsedTime + " ms");

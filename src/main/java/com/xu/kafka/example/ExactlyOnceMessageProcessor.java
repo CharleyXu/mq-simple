@@ -1,5 +1,6 @@
 package com.xu.kafka.example;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by CharleyXu on 2020-07-30
  */
+@Slf4j
 public class ExactlyOnceMessageProcessor extends Thread {
 
     private static final boolean READ_COMMITTED = true;
@@ -132,7 +134,7 @@ public class ExactlyOnceMessageProcessor extends Thread {
     }
 
     private void printWithTxnId(final String message) {
-        System.out.println(transactionalId + ": " + message);
+        log.info(transactionalId + ": " + message);
     }
 
     private ProducerRecord<Integer, String> transform(final ConsumerRecord<Integer, String> record) {

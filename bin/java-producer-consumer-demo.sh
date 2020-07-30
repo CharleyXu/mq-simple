@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-base_dir=$(dirname $0)/../..
+base_dir=$(dirname $0)/..
 
-if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
-    export KAFKA_HEAP_OPTS="-Xmx512M"
-fi
-exec $base_dir/bin/kafka-run-class.sh kafka.examples.KafkaConsumerProducerDemo $@
+java -Dloader.main=com.xu.kafka.example.KafkaConsumerProducerDemo -jar $base_dir/kafka-demo.jar

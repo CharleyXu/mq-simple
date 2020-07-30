@@ -1,5 +1,7 @@
 package com.xu.kafka.example;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -8,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by CharleyXu on 2020-07-30
  */
+@Slf4j
 public class KafkaConsumerProducerDemo {
 
     public static void main(String[] args) throws InterruptedException, TimeoutException {
@@ -23,7 +26,7 @@ public class KafkaConsumerProducerDemo {
             throw new TimeoutException("Timeout after 5 minutes waiting for demo producer and consumer to finish");
         }
         consumerThread.shutdown();
-        System.out.println("All finished!");
+        log.info("All finished!");
     }
 
 }
